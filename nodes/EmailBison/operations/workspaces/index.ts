@@ -288,7 +288,9 @@ export const workspaceFields: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{ name: 'Admin', value: 'admin' },
-			{ name: 'Member', value: 'member' },
+			{ name: 'Editor', value: 'editor' },
+			{ name: 'Client', value: 'client' },
+			{ name: 'Reseller', value: 'reseller' },
 		],
 		displayOptions: {
 			show: {
@@ -296,7 +298,7 @@ export const workspaceFields: INodeProperties[] = [
 				operation: ['inviteMembers'],
 			},
 		},
-		default: 'member',
+		default: 'admin',
 		description: 'Role of the member',
 	},
 

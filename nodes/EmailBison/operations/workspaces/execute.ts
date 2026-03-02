@@ -168,7 +168,7 @@ export async function executeWorkspaceOperation(
 
 	if (operation === 'inviteMembers') {
 		const email = this.getNodeParameter('email', index) as string;
-		const role = this.getNodeParameter('role', index, 'member') as string;
+		const role = this.getNodeParameter('role', index, 'admin') as string;
 
 		const body: IDataObject = {
 			email,

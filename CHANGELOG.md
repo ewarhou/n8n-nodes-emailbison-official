@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3] - 2026-03-02
+
+### 🐛 Bug Fixes
+
+- **Invite Members** - Fixed role options to match API. Replaced invalid `member` role with correct enum values: `admin`, `editor`, `client`, `reseller`
+- Updated fallback default role from `member` to `admin` in execution logic
+
 ## [1.0.0] - 2025-01-12
 
 ### 🎉 Initial Release
