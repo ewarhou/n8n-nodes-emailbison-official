@@ -73,29 +73,59 @@ export async function executeReplyOperation(
 
 		const qs: IDataObject = {};
 
-		if (!returnAll) {
-			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
-		}
-
 		// Add filters to query string
 		if (filters.campaignId) qs.campaign_id = filters.campaignId;
 		if (filters.lead_id) qs.lead_id = filters.lead_id;
 		if (filters.status) qs.status = filters.status;
 
-		const responseData = await this.helpers.httpRequestWithAuthentication.call(
-			this,
-			'emailBisonApi',
-			{
-				method: 'GET',
-				baseURL: `${credentials.serverUrl}/api`,
-				url: '/replies',
-				qs,
-			},
-		);
+		if (returnAll) {
+			// Paginate through all pages until an empty page is returned
+			const allReplies: IDataObject[] = [];
+			let page = 1;
+			const MAX_PAGES = 1000;
 
-		const replies = responseData.data || responseData;
-		return replies.map((reply: IDataObject) => ({ json: reply, pairedItem: { item: index } }));
+			while (page <= MAX_PAGES) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/replies',
+						qs: { ...qs, page },
+					},
+				);
+
+				const pageReplies: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageReplies) || pageReplies.length === 0) break;
+
+				allReplies.push(...pageReplies);
+
+				const totalFromMeta = responseData.meta?.total as number | undefined;
+				if (totalFromMeta !== undefined && allReplies.length >= totalFromMeta) break;
+
+				page++;
+			}
+
+			return allReplies.map((reply: IDataObject) => ({ json: reply, pairedItem: { item: index } }));
+		} else {
+			const limit = this.getNodeParameter('limit', index, 50) as number;
+			qs.limit = limit;
+
+			const responseData = await this.helpers.httpRequestWithAuthentication.call(
+				this,
+				'emailBisonApi',
+				{
+					method: 'GET',
+					baseURL: `${credentials.serverUrl}/api`,
+					url: '/replies',
+					qs,
+				},
+			);
+
+			const replies: IDataObject[] = responseData.data || responseData;
+			return replies.map((reply: IDataObject) => ({ json: reply, pairedItem: { item: index } }));
+		}
 	}
 
 	if (operation === 'markInterested') {

@@ -114,15 +114,6 @@ export async function executeLeadOperation(
 
 		const qs: IDataObject = {};
 
-		// NOTE: EmailBison API has a hard limit of 15 leads per page
-		// There is NO pagination parameter available in the API
-		// The API always returns a maximum of 15 leads
-		// Users should use search and filters to narrow down results
-		if (!returnAll) {
-			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit; // Kept for compatibility, but API ignores this and returns max 15
-		}
-
 		// Add search parameter (top-level, not in filters)
 		if (search) {
 			qs.search = search;
@@ -135,12 +126,10 @@ export async function executeLeadOperation(
 		}
 
 		if (filters.verification_statuses && Array.isArray(filters.verification_statuses) && filters.verification_statuses.length > 0) {
-			// API expects array format: filters.verification_statuses=value1&filters.verification_statuses=value2
 			qs['filters.verification_statuses'] = filters.verification_statuses;
 		}
 
 		if (filters.tag_ids) {
-			// Convert comma-separated string to array
 			const tagIds = (filters.tag_ids as string).split(',').map((id) => id.trim()).filter((id) => id);
 			if (tagIds.length > 0) {
 				qs['filters.tag_ids'] = tagIds;
@@ -148,7 +137,6 @@ export async function executeLeadOperation(
 		}
 
 		if (filters.excluded_tag_ids) {
-			// Convert comma-separated string to array
 			const excludedTagIds = (filters.excluded_tag_ids as string).split(',').map((id) => id.trim()).filter((id) => id);
 			if (excludedTagIds.length > 0) {
 				qs['filters.excluded_tag_ids'] = excludedTagIds;
@@ -159,22 +147,55 @@ export async function executeLeadOperation(
 			qs['filters.without_tags'] = true;
 		}
 
-		const responseData = await this.helpers.httpRequestWithAuthentication.call(
-			this,
-			'emailBisonApi',
-			{
-				method: 'GET',
-				baseURL: `${credentials.serverUrl}/api`,
-				url: '/leads',
-				qs,
-			},
-		);
+		if (returnAll) {
+			// Paginate through all pages until an empty page is returned
+			const allLeads: IDataObject[] = [];
+			let page = 1;
+			const MAX_PAGES = 1000;
 
-		// Extract the leads array from the response
-		const leads = responseData.data || responseData;
+			while (page <= MAX_PAGES) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/leads',
+						qs: { ...qs, page },
+					},
+				);
 
-		// Return in n8n format: array of objects with 'json' property
-		return leads.map((lead: IDataObject) => ({ json: lead, pairedItem: { item: index } }));
+				const pageLeads: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageLeads) || pageLeads.length === 0) break;
+
+				allLeads.push(...pageLeads);
+
+				// If the page returned fewer items than a full page, we've reached the end
+				const totalFromMeta = responseData.meta?.total as number | undefined;
+				if (totalFromMeta !== undefined && allLeads.length >= totalFromMeta) break;
+
+				page++;
+			}
+
+			return allLeads.map((lead: IDataObject) => ({ json: lead, pairedItem: { item: index } }));
+		} else {
+			const limit = this.getNodeParameter('limit', index, 50) as number;
+			qs.limit = limit;
+
+			const responseData = await this.helpers.httpRequestWithAuthentication.call(
+				this,
+				'emailBisonApi',
+				{
+					method: 'GET',
+					baseURL: `${credentials.serverUrl}/api`,
+					url: '/leads',
+					qs,
+				},
+			);
+
+			const leads: IDataObject[] = responseData.data || responseData;
+			return leads.map((lead: IDataObject) => ({ json: lead, pairedItem: { item: index } }));
+		}
 	}
 
 	if (operation === 'update') {

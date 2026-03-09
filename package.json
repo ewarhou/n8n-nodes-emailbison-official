@@ -1,6 +1,6 @@
 {
-  "name": "n8n-nodes-emailbison-official",
-  "version": "1.1.3",
+  "name": "n8n-nodes-emailbison",
+  "version": "1.2.0",
   "description": "n8n community node for EmailBison - A white-labeled email outreach platform with dynamic server URL support",
   "keywords": [
     "n8n-community-node-package",
@@ -13,14 +13,14 @@
     "white-label"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/emailbison-public/n8n-nodes-emailbison-official",
+  "homepage": "https://github.com/ewarhou/n8n-nodes-emailbison-official",
   "author": {
-    "name": "Brandon Charleson",
-    "email": "brandon@topoffunnel.com"
+    "name": "amine",
+    "email": "ewarhou@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/emailbison-public/n8n-nodes-emailbison-official.git"
+    "url": "https://github.com/ewarhou/n8n-nodes-emailbison-official.git"
   },
   "engines": {
     "node": ">=18.10",

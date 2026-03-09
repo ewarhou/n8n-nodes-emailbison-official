@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-03-09
+
+### 🐛 Bug Fixes
+
+- **Leads → Get Many** - Fixed "Return All" to paginate through all pages using the `page` query parameter instead of stopping at the first page
+- **Replies → Get Many** - Fixed "Return All" to paginate through all pages using the `page` query parameter instead of stopping at the first page
+
 ## [1.1.3] - 2026-03-02
 
 ### 🐛 Bug Fixes
