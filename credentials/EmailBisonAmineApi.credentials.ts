@@ -20,7 +20,6 @@ export class EmailBisonAmineApi implements ICredentialType {
       displayName: 'Server URL',
       name: 'serverUrl',
       type: 'string',
-      noDataExpression: true,
       default: 'https://send.topoffunnel.com',
       placeholder: 'https://send.youragency.com',
       description: 'The base URL of your EmailBison instance (without /api)',
@@ -31,7 +30,6 @@ export class EmailBisonAmineApi implements ICredentialType {
       name: 'apiToken',
       type: 'string',
       typeOptions: { password: true },
-      noDataExpression: true,
       default: '',
       description: 'Your EmailBison API token. Paste only the token — Bearer is added automatically.',
       required: true,
@@ -52,18 +50,8 @@ export class EmailBisonAmineApi implements ICredentialType {
   test: ICredentialTestRequest = {
     request: {
       baseURL: '={{$credentials.serverUrl}}/api',
-      url: '/users',
+      url: '/workspaces',
       method: 'GET',
     },
-    rules: [
-      {
-        type: 'responseSuccessBody',
-        properties: {
-          key: 'data',
-          message: 'Invalid credentials or server URL. Please check your API token and server URL.',
-          value: undefined,
-        },
-      },
-    ],
   };
 }
