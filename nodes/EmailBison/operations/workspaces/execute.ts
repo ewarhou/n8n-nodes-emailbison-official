@@ -59,21 +59,29 @@ export async function executeWorkspaceOperation(
 			return allWorkspaces.map((workspace: IDataObject) => ({ json: workspace, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedWorkspaces: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/workspaces/v1.1',
-					qs,
-				},
-			);
+			while (collectedWorkspaces.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/workspaces/v1.1',
+						qs: { ...qs, page },
+					},
+				);
 
-			const workspaces: IDataObject[] = responseData.data || responseData;
-			return workspaces.map((workspace: IDataObject) => ({ json: workspace, pairedItem: { item: index } }));
+				const pageWorkspaces: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageWorkspaces) || pageWorkspaces.length === 0) break;
+
+				collectedWorkspaces.push(...pageWorkspaces);
+				page++;
+			}
+
+			return collectedWorkspaces.slice(0, limit).map((workspace: IDataObject) => ({ json: workspace, pairedItem: { item: index } }));
 		}
 	}
 

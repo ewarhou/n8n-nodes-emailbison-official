@@ -180,21 +180,29 @@ export async function executeLeadOperation(
 			return allLeads.map((lead: IDataObject) => ({ json: lead, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedLeads: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/leads',
-					qs,
-				},
-			);
+			while (collectedLeads.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/leads',
+						qs: { ...qs, page },
+					},
+				);
 
-			const leads: IDataObject[] = responseData.data || responseData;
-			return leads.map((lead: IDataObject) => ({ json: lead, pairedItem: { item: index } }));
+				const pageLeads: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageLeads) || pageLeads.length === 0) break;
+
+				collectedLeads.push(...pageLeads);
+				page++;
+			}
+
+			return collectedLeads.slice(0, limit).map((lead: IDataObject) => ({ json: lead, pairedItem: { item: index } }));
 		}
 	}
 

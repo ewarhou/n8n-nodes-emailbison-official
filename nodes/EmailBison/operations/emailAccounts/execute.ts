@@ -97,21 +97,29 @@ export async function executeEmailAccountOperation(
 			return allAccounts.map((account: IDataObject) => ({ json: account, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedAccounts: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/sender-emails',
-					qs,
-				},
-			);
+			while (collectedAccounts.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/sender-emails',
+						qs: { ...qs, page },
+					},
+				);
 
-			const emailAccounts: IDataObject[] = responseData.data || responseData;
-			return emailAccounts.map((account: IDataObject) => ({ json: account, pairedItem: { item: index } }));
+				const pageAccounts: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageAccounts) || pageAccounts.length === 0) break;
+
+				collectedAccounts.push(...pageAccounts);
+				page++;
+			}
+
+			return collectedAccounts.slice(0, limit).map((account: IDataObject) => ({ json: account, pairedItem: { item: index } }));
 		}
 	}
 

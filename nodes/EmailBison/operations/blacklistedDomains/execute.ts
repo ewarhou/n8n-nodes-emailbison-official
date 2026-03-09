@@ -89,24 +89,29 @@ export async function executeBlacklistedDomainOperation(
 			return allDomains.map((item: IDataObject) => ({ json: item, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedDomains: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/blacklisted-domains',
-					qs,
-				},
-			);
+			while (collectedDomains.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/blacklisted-domains',
+						qs: { ...qs, page },
+					},
+				);
 
-			const blacklistedDomains = responseData.data || responseData;
-			if (Array.isArray(blacklistedDomains)) {
-				return blacklistedDomains.map((item: IDataObject) => ({ json: item, pairedItem: { item: index } }));
+				const pageDomains: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageDomains) || pageDomains.length === 0) break;
+
+				collectedDomains.push(...pageDomains);
+				page++;
 			}
-			return [{ json: blacklistedDomains, pairedItem: { item: index } }];
+
+			return collectedDomains.slice(0, limit).map((item: IDataObject) => ({ json: item, pairedItem: { item: index } }));
 		}
 	}
 

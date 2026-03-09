@@ -66,21 +66,29 @@ export async function executeTagOperation(
 			return allTags.map((tag: IDataObject) => ({ json: tag, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedTags: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/tags',
-					qs,
-				},
-			);
+			while (collectedTags.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/tags',
+						qs: { ...qs, page },
+					},
+				);
 
-			const tags: IDataObject[] = responseData.data || responseData;
-			return tags.map((tag: IDataObject) => ({ json: tag, pairedItem: { item: index } }));
+				const pageTags: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageTags) || pageTags.length === 0) break;
+
+				collectedTags.push(...pageTags);
+				page++;
+			}
+
+			return collectedTags.slice(0, limit).map((tag: IDataObject) => ({ json: tag, pairedItem: { item: index } }));
 		}
 	}
 

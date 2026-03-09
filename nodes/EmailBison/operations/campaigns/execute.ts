@@ -205,21 +205,29 @@ export async function executeCampaignOperation(
 			return allCampaigns.map((campaign: IDataObject) => ({ json: campaign, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedCampaigns: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/campaigns',
-					qs,
-				},
-			);
+			while (collectedCampaigns.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/campaigns',
+						qs: { ...qs, page },
+					},
+				);
 
-			const campaigns: IDataObject[] = responseData.data || responseData;
-			return campaigns.map((campaign: IDataObject) => ({ json: campaign, pairedItem: { item: index } }));
+				const pageCampaigns: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageCampaigns) || pageCampaigns.length === 0) break;
+
+				collectedCampaigns.push(...pageCampaigns);
+				page++;
+			}
+
+			return collectedCampaigns.slice(0, limit).map((campaign: IDataObject) => ({ json: campaign, pairedItem: { item: index } }));
 		}
 	}
 

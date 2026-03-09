@@ -89,24 +89,29 @@ export async function executeBlacklistedEmailOperation(
 			return allEmails.map((item: IDataObject) => ({ json: item, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedEmails: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/blacklisted-emails',
-					qs,
-				},
-			);
+			while (collectedEmails.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/blacklisted-emails',
+						qs: { ...qs, page },
+					},
+				);
 
-			const blacklistedEmails = responseData.data || responseData;
-			if (Array.isArray(blacklistedEmails)) {
-				return blacklistedEmails.map((item: IDataObject) => ({ json: item, pairedItem: { item: index } }));
+				const pageEmails: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageEmails) || pageEmails.length === 0) break;
+
+				collectedEmails.push(...pageEmails);
+				page++;
 			}
-			return [{ json: blacklistedEmails, pairedItem: { item: index } }];
+
+			return collectedEmails.slice(0, limit).map((item: IDataObject) => ({ json: item, pairedItem: { item: index } }));
 		}
 	}
 

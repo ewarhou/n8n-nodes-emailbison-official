@@ -110,21 +110,29 @@ export async function executeReplyOperation(
 			return allReplies.map((reply: IDataObject) => ({ json: reply, pairedItem: { item: index } }));
 		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
+			const collectedReplies: IDataObject[] = [];
+			let page = 1;
 
-			const responseData = await this.helpers.httpRequestWithAuthentication.call(
-				this,
-				'emailBisonAmineApi',
-				{
-					method: 'GET',
-					baseURL: `${credentials.serverUrl}/api`,
-					url: '/replies',
-					qs,
-				},
-			);
+			while (collectedReplies.length < limit) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/replies',
+						qs: { ...qs, page },
+					},
+				);
 
-			const replies: IDataObject[] = responseData.data || responseData;
-			return replies.map((reply: IDataObject) => ({ json: reply, pairedItem: { item: index } }));
+				const pageReplies: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageReplies) || pageReplies.length === 0) break;
+
+				collectedReplies.push(...pageReplies);
+				page++;
+			}
+
+			return collectedReplies.slice(0, limit).map((reply: IDataObject) => ({ json: reply, pairedItem: { item: index } }));
 		}
 	}
 
