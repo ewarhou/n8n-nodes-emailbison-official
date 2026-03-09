@@ -5,7 +5,7 @@ export async function executeTagOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'create') {
 		const name = this.getNodeParameter('name', index) as string;
@@ -18,7 +18,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -41,7 +41,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -59,7 +59,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -103,7 +103,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -148,7 +148,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -179,7 +179,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -210,7 +210,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -241,7 +241,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -272,7 +272,7 @@ export async function executeTagOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,

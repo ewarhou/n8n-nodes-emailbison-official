@@ -19,10 +19,10 @@ import { replyOperations, replyFields } from './operations/replies';
 import { blacklistedEmailOperations, blacklistedEmailFields } from './operations/blacklistedEmails';
 import { blacklistedDomainOperations, blacklistedDomainFields } from './operations/blacklistedDomains';
 
-export class EmailBison implements INodeType {
+export class EmailBisonAmine implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'EmailBison',
-		name: 'emailBison',
+		displayName: 'EmailBison (Amine)',
+		name: 'emailBisonAmine',
 		icon: 'file:emailbison.svg',
 		group: ['transform'],
 		version: 1,
@@ -35,7 +35,7 @@ export class EmailBison implements INodeType {
 		outputs: ['main'],
 		credentials: [
 			{
-				name: 'emailBisonApi',
+				name: 'emailBisonAmineApi',
 				required: true,
 			},
 		],
@@ -123,12 +123,12 @@ export class EmailBison implements INodeType {
 		loadOptions: {
 			// Get all leads for dropdown selection
 			async getLeads(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const credentials = await this.getCredentials('emailBisonApi');
+				const credentials = await this.getCredentials('emailBisonAmineApi');
 
 				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(
 						this,
-						'emailBisonApi',
+						'emailBisonAmineApi',
 						{
 							method: 'GET',
 							baseURL: `${credentials.serverUrl}/api`,
@@ -156,12 +156,12 @@ export class EmailBison implements INodeType {
 
 			// Get all campaigns for dropdown selection
 			async getCampaigns(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const credentials = await this.getCredentials('emailBisonApi');
+				const credentials = await this.getCredentials('emailBisonAmineApi');
 
 				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(
 						this,
-						'emailBisonApi',
+						'emailBisonAmineApi',
 						{
 							method: 'GET',
 							baseURL: `${credentials.serverUrl}/api`,
@@ -190,12 +190,12 @@ export class EmailBison implements INodeType {
 
 			// Get all email accounts (sender emails) for dropdown selection
 			async getSenderEmails(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const credentials = await this.getCredentials('emailBisonApi');
+				const credentials = await this.getCredentials('emailBisonAmineApi');
 
 				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(
 						this,
-						'emailBisonApi',
+						'emailBisonAmineApi',
 						{
 							method: 'GET',
 							baseURL: `${credentials.serverUrl}/api`,
@@ -224,12 +224,12 @@ export class EmailBison implements INodeType {
 
 			// Get all workspaces for dropdown selection
 			async getWorkspaces(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const credentials = await this.getCredentials('emailBisonApi');
+				const credentials = await this.getCredentials('emailBisonAmineApi');
 
 				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(
 						this,
-						'emailBisonApi',
+						'emailBisonAmineApi',
 						{
 							method: 'GET',
 							baseURL: `${credentials.serverUrl}/api`,
@@ -258,12 +258,12 @@ export class EmailBison implements INodeType {
 
 			// Get all tags for dropdown selection
 			async getTags(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const credentials = await this.getCredentials('emailBisonApi');
+				const credentials = await this.getCredentials('emailBisonAmineApi');
 
 				try {
 					const response = await this.helpers.httpRequestWithAuthentication.call(
 						this,
-						'emailBisonApi',
+						'emailBisonAmineApi',
 						{
 							method: 'GET',
 							baseURL: `${credentials.serverUrl}/api`,

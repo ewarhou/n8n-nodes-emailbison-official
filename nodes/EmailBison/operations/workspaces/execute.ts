@@ -5,14 +5,14 @@ export async function executeWorkspaceOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'get') {
 		const teamId = this.getNodeParameter('teamId', index) as string;
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -34,7 +34,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -54,7 +54,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -75,7 +75,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PUT',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -92,7 +92,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -114,7 +114,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -135,7 +135,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -154,7 +154,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -177,7 +177,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -194,7 +194,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -210,7 +210,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -224,7 +224,7 @@ export async function executeWorkspaceOperation(
 	if (operation === 'getMasterInboxSettings') {
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -242,7 +242,7 @@ export async function executeWorkspaceOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -257,7 +257,7 @@ export async function executeWorkspaceOperation(
 	if (operation === 'getStats') {
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -271,7 +271,7 @@ export async function executeWorkspaceOperation(
 	if (operation === 'getLineAreaChartStats') {
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,

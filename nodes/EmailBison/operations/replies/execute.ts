@@ -5,7 +5,7 @@ export async function executeReplyOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'compose') {
 		// Compose and send a new email
@@ -54,7 +54,7 @@ export async function executeReplyOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -87,7 +87,7 @@ export async function executeReplyOperation(
 			while (page <= MAX_PAGES) {
 				const responseData = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'GET',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -114,7 +114,7 @@ export async function executeReplyOperation(
 
 			const responseData = await this.helpers.httpRequestWithAuthentication.call(
 				this,
-				'emailBisonApi',
+				'emailBisonAmineApi',
 				{
 					method: 'GET',
 					baseURL: `${credentials.serverUrl}/api`,
@@ -134,7 +134,7 @@ export async function executeReplyOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -158,7 +158,7 @@ export async function executeReplyOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,

@@ -5,7 +5,7 @@ export async function executeEmailAccountOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'create') {
 		// Create email account
@@ -31,7 +31,7 @@ export async function executeEmailAccountOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -49,7 +49,7 @@ export async function executeEmailAccountOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -73,7 +73,7 @@ export async function executeEmailAccountOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -94,7 +94,7 @@ export async function executeEmailAccountOperation(
 		// First, get the current email account data
 		const currentData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -118,7 +118,7 @@ export async function executeEmailAccountOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -136,7 +136,7 @@ export async function executeEmailAccountOperation(
 
 		await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,

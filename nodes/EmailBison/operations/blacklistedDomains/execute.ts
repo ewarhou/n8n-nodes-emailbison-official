@@ -5,7 +5,7 @@ export async function executeBlacklistedDomainOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'create') {
 		// Add domain to blacklist
@@ -17,7 +17,7 @@ export async function executeBlacklistedDomainOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -41,7 +41,7 @@ export async function executeBlacklistedDomainOperation(
 
 		await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -65,7 +65,7 @@ export async function executeBlacklistedDomainOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,

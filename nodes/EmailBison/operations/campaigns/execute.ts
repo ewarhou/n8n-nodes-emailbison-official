@@ -5,7 +5,7 @@ export async function executeCampaignOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'create') {
 		// Create campaign
@@ -73,7 +73,7 @@ export async function executeCampaignOperation(
 		// Step 1: Create the campaign
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -90,7 +90,7 @@ export async function executeCampaignOperation(
 			try {
 				await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'POST',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -124,7 +124,7 @@ export async function executeCampaignOperation(
 
 				await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'POST',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -151,7 +151,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -180,7 +180,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -250,7 +250,7 @@ export async function executeCampaignOperation(
 		// Step 1: Update the campaign
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -265,7 +265,7 @@ export async function executeCampaignOperation(
 			try {
 				await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'POST',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -290,7 +290,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -309,7 +309,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -358,7 +358,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -381,7 +381,7 @@ export async function executeCampaignOperation(
 
 		await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -421,7 +421,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -454,7 +454,7 @@ export async function executeCampaignOperation(
 			try {
 				const campaignData = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'GET',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -485,7 +485,7 @@ export async function executeCampaignOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,

@@ -5,7 +5,7 @@ export async function executeLeadOperation(
 	operation: string,
 	index: number,
 ): Promise<IDataObject | INodeExecutionData[]> {
-	const credentials = await this.getCredentials('emailBisonApi');
+	const credentials = await this.getCredentials('emailBisonAmineApi');
 
 	if (operation === 'create') {
 		// Create lead
@@ -45,7 +45,7 @@ export async function executeLeadOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'POST',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -70,7 +70,7 @@ export async function executeLeadOperation(
 			try {
 				await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'POST',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -95,7 +95,7 @@ export async function executeLeadOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'GET',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -156,7 +156,7 @@ export async function executeLeadOperation(
 			while (page <= MAX_PAGES) {
 				const responseData = await this.helpers.httpRequestWithAuthentication.call(
 					this,
-					'emailBisonApi',
+					'emailBisonAmineApi',
 					{
 						method: 'GET',
 						baseURL: `${credentials.serverUrl}/api`,
@@ -184,7 +184,7 @@ export async function executeLeadOperation(
 
 			const responseData = await this.helpers.httpRequestWithAuthentication.call(
 				this,
-				'emailBisonApi',
+				'emailBisonAmineApi',
 				{
 					method: 'GET',
 					baseURL: `${credentials.serverUrl}/api`,
@@ -242,7 +242,7 @@ export async function executeLeadOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'PATCH',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -260,7 +260,7 @@ export async function executeLeadOperation(
 
 		await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,
@@ -300,7 +300,7 @@ export async function executeLeadOperation(
 
 		const responseData = await this.helpers.httpRequestWithAuthentication.call(
 			this,
-			'emailBisonApi',
+			'emailBisonAmineApi',
 			{
 				method: 'DELETE',
 				baseURL: `${credentials.serverUrl}/api`,

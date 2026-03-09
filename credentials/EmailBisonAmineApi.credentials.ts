@@ -5,8 +5,8 @@ import type {
   INodeProperties,
 } from 'n8n-workflow';
 
-export class EmailBisonApi implements ICredentialType {
-  name = 'emailBisonApi';
+export class EmailBisonAmineApi implements ICredentialType {
+  name = 'emailBisonAmineApi';
 
   displayName = 'EmailBison API';
 
