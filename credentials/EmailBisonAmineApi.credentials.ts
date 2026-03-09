@@ -1,8 +1,9 @@
 import type {
-  IAuthenticateGeneric,
   ICredentialTestRequest,
   ICredentialType,
   INodeProperties,
+  IHttpRequestOptions,
+  ICredentialDataDecryptedObject,
 } from 'n8n-workflow';
 
 export class EmailBisonAmineApi implements ICredentialType {
@@ -30,18 +31,20 @@ export class EmailBisonAmineApi implements ICredentialType {
       type: 'string',
       typeOptions: { password: true },
       default: '',
-      description: 'Your EmailBison API token (Bearer prefix will be added automatically)',
+      description: 'Your EmailBison API token. Paste only the token — Bearer is added automatically.',
       required: true,
     },
   ];
 
-  authenticate: IAuthenticateGeneric = {
-    type: 'generic',
-    properties: {
-      headers: {
-        Authorization: '=Bearer {{$credentials.apiToken}}',
-      },
-    },
+  authenticate = async (
+    credentials: ICredentialDataDecryptedObject,
+    requestOptions: IHttpRequestOptions,
+  ): Promise<IHttpRequestOptions> => {
+    requestOptions.headers = {
+      ...(requestOptions.headers ?? {}),
+      Authorization: `Bearer ${credentials.apiToken}`,
+    };
+    return requestOptions;
   };
 
   test: ICredentialTestRequest = {

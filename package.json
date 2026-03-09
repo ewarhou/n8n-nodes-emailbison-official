@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-emailbison-amine",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "n8n community node for EmailBison - A white-labeled email outreach platform with dynamic server URL support",
   "keywords": [
     "n8n-community-node-package",
