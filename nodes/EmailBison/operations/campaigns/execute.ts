@@ -169,28 +169,58 @@ export async function executeCampaignOperation(
 
 		const qs: IDataObject = {};
 
-		if (!returnAll) {
-			const limit = this.getNodeParameter('limit', index, 50) as number;
-			qs.limit = limit;
-		}
-
 		// Add filters to query string
 		if (filters.status) qs.status = filters.status;
 		if (filters.tag) qs.tag = filters.tag;
 
-		const responseData = await this.helpers.httpRequestWithAuthentication.call(
-			this,
-			'emailBisonAmineApi',
-			{
-				method: 'GET',
-				baseURL: `${credentials.serverUrl}/api`,
-				url: '/campaigns',
-				qs,
-			},
-		);
+		if (returnAll) {
+			// Paginate through all pages until an empty page is returned
+			const allCampaigns: IDataObject[] = [];
+			let page = 1;
+			const MAX_PAGES = 1000;
 
-		const campaigns = responseData.data || responseData;
-		return campaigns.map((campaign: IDataObject) => ({ json: campaign, pairedItem: { item: index } }));
+			while (page <= MAX_PAGES) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/campaigns',
+						qs: { ...qs, page },
+					},
+				);
+
+				const pageCampaigns: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageCampaigns) || pageCampaigns.length === 0) break;
+
+				allCampaigns.push(...pageCampaigns);
+
+				const totalFromMeta = responseData.meta?.total as number | undefined;
+				if (totalFromMeta !== undefined && allCampaigns.length >= totalFromMeta) break;
+
+				page++;
+			}
+
+			return allCampaigns.map((campaign: IDataObject) => ({ json: campaign, pairedItem: { item: index } }));
+		} else {
+			const limit = this.getNodeParameter('limit', index, 50) as number;
+			qs.limit = limit;
+
+			const responseData = await this.helpers.httpRequestWithAuthentication.call(
+				this,
+				'emailBisonAmineApi',
+				{
+					method: 'GET',
+					baseURL: `${credentials.serverUrl}/api`,
+					url: '/campaigns',
+					qs,
+				},
+			);
+
+			const campaigns: IDataObject[] = responseData.data || responseData;
+			return campaigns.map((campaign: IDataObject) => ({ json: campaign, pairedItem: { item: index } }));
+		}
 	}
 
 	if (operation === 'update') {

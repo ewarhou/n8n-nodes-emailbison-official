@@ -34,24 +34,54 @@ export async function executeTagOperation(
 		const returnAll = this.getNodeParameter('returnAll', index, false) as boolean;
 		const qs: IDataObject = {};
 
-		if (!returnAll) {
+		if (returnAll) {
+			// Paginate through all pages until an empty page is returned
+			const allTags: IDataObject[] = [];
+			let page = 1;
+			const MAX_PAGES = 1000;
+
+			while (page <= MAX_PAGES) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/tags',
+						qs: { ...qs, page },
+					},
+				);
+
+				const pageTags: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageTags) || pageTags.length === 0) break;
+
+				allTags.push(...pageTags);
+
+				const totalFromMeta = responseData.meta?.total as number | undefined;
+				if (totalFromMeta !== undefined && allTags.length >= totalFromMeta) break;
+
+				page++;
+			}
+
+			return allTags.map((tag: IDataObject) => ({ json: tag, pairedItem: { item: index } }));
+		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
 			qs.limit = limit;
+
+			const responseData = await this.helpers.httpRequestWithAuthentication.call(
+				this,
+				'emailBisonAmineApi',
+				{
+					method: 'GET',
+					baseURL: `${credentials.serverUrl}/api`,
+					url: '/tags',
+					qs,
+				},
+			);
+
+			const tags: IDataObject[] = responseData.data || responseData;
+			return tags.map((tag: IDataObject) => ({ json: tag, pairedItem: { item: index } }));
 		}
-
-		const responseData = await this.helpers.httpRequestWithAuthentication.call(
-			this,
-			'emailBisonAmineApi',
-			{
-				method: 'GET',
-				baseURL: `${credentials.serverUrl}/api`,
-				url: '/tags',
-				qs,
-			},
-		);
-
-		const tags = responseData.data || responseData;
-		return tags.map((tag: IDataObject) => ({ json: tag, pairedItem: { item: index } }));
 	}
 
 	if (operation === 'delete') {

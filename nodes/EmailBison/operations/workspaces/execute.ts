@@ -27,24 +27,54 @@ export async function executeWorkspaceOperation(
 		const returnAll = this.getNodeParameter('returnAll', index, false) as boolean;
 		const qs: IDataObject = {};
 
-		if (!returnAll) {
+		if (returnAll) {
+			// Paginate through all pages until an empty page is returned
+			const allWorkspaces: IDataObject[] = [];
+			let page = 1;
+			const MAX_PAGES = 1000;
+
+			while (page <= MAX_PAGES) {
+				const responseData = await this.helpers.httpRequestWithAuthentication.call(
+					this,
+					'emailBisonAmineApi',
+					{
+						method: 'GET',
+						baseURL: `${credentials.serverUrl}/api`,
+						url: '/workspaces/v1.1',
+						qs: { ...qs, page },
+					},
+				);
+
+				const pageWorkspaces: IDataObject[] = responseData.data || responseData;
+				if (!Array.isArray(pageWorkspaces) || pageWorkspaces.length === 0) break;
+
+				allWorkspaces.push(...pageWorkspaces);
+
+				const totalFromMeta = responseData.meta?.total as number | undefined;
+				if (totalFromMeta !== undefined && allWorkspaces.length >= totalFromMeta) break;
+
+				page++;
+			}
+
+			return allWorkspaces.map((workspace: IDataObject) => ({ json: workspace, pairedItem: { item: index } }));
+		} else {
 			const limit = this.getNodeParameter('limit', index, 50) as number;
 			qs.limit = limit;
+
+			const responseData = await this.helpers.httpRequestWithAuthentication.call(
+				this,
+				'emailBisonAmineApi',
+				{
+					method: 'GET',
+					baseURL: `${credentials.serverUrl}/api`,
+					url: '/workspaces/v1.1',
+					qs,
+				},
+			);
+
+			const workspaces: IDataObject[] = responseData.data || responseData;
+			return workspaces.map((workspace: IDataObject) => ({ json: workspace, pairedItem: { item: index } }));
 		}
-
-		const responseData = await this.helpers.httpRequestWithAuthentication.call(
-			this,
-			'emailBisonAmineApi',
-			{
-				method: 'GET',
-				baseURL: `${credentials.serverUrl}/api`,
-				url: '/workspaces/v1.1',
-				qs,
-			},
-		);
-
-		const workspaces = responseData.data || responseData;
-		return workspaces.map((workspace: IDataObject) => ({ json: workspace, pairedItem: { item: index } }));
 	}
 
 	if (operation === 'create') {
